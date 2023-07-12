@@ -22,6 +22,6 @@ public class Meta
     public string? PreviousPageUrl { get; set; }
 
     [JsonPropertyName("next_page_url")]
-    public string? NextPageUrl { get; set; } 
+    public string? NextPageUrl { get; set; }
 }
 

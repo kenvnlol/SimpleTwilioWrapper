@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
 using TwilioConversations.Resources;
-using TwilioConversations.ResponseModels;
 using TwilioConversations.Utility;
 
 namespace TwilioConversations;
