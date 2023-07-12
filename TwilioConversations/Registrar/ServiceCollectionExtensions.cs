@@ -22,6 +22,6 @@ public static class ServiceCollectionExtensions
             c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
         });
 
-        services.AddScoped<TwilioConversations>();
+        services.AddScoped<TwilioConversation>();
     }
 }

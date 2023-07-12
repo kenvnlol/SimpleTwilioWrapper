@@ -6,11 +6,11 @@ using TwilioConversations.Utility;
 namespace TwilioConversations;
 
 
-public class TwilioConversations
+public class ConversationClient
 {
     private readonly IHttpClientFactory _factory;
     private readonly HttpClient _client;
-    public TwilioConversations(IHttpClientFactory factory)
+    public ConversationClient(IHttpClientFactory factory)
     {
         _factory = factory;
         _client = _factory.CreateClient(HttpClientNames.TwilioConversation);
