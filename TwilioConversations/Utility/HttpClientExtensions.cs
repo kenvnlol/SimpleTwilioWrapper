@@ -2,36 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-
+using TwilioConversations.Resources;
 
 namespace TwilioConversations.Utility;
 
 public static class HttpClientExtensions
 {
-    public static async Task<HttpResponseMessage> SendHttpRequestAsync(this HttpClient client, HttpMethod method, HttpContent? content = null, string? uri = null)
+
+    public static async Task<string> PostHttpRequest(this HttpClient client, HttpContent? content = null, string? uri = null)
     {
-        var request = new HttpRequestMessage(method, uri)
-        {
-            Content = content,
-        };
+        var response = await client.PostAsync(uri, content);
 
-        var response = await client.SendAsync(request);
+        response.EnsureSuccessStatusCode();
 
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new Exception($"Request failed with status code: {response.StatusCode}");
-        }
-
-        return response;
+        return await response.Content.ReadAsStringAsync();
     }
-
-    public static async Task<JsonElement> GetContentAsJsonElementAsync(this HttpResponseMessage response)
+    public static async Task<string> GetHttpRequest(this HttpClient client, HttpContent? content = null, string? uri = null) 
     {
-        var responseBody = await response.Content.ReadAsStringAsync();
-        var parsedJson = JsonDocument.Parse(responseBody);
-        return parsedJson.RootElement;
+        var response = await client.GetAsync(uri);
+
+        response.EnsureSuccessStatusCode();
+
+        return await response.Content.ReadAsStringAsync();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using TwilioConversations.Resources;
 using TwilioConversations.ResponseModels;
 using TwilioConversations.Utility;
 
@@ -18,48 +19,38 @@ public class TwilioConversations
 
     public async Task<string> CreateConversation(string? friendlyName = null)
     {
-        var content = CreateFormUrlEncodedContent("FriendlyName", friendlyName ?? string.Empty);
+        var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "FriendlyName", friendlyName ?? string.Empty } });
 
-        var response = await _client.SendHttpRequestAsync(HttpMethod.Post, content);
+        var response = await _client.PostHttpRequest(content);
 
-        var jsonResponse = await response.GetContentAsJsonElementAsync();
+        var deserialized = JsonSerializer.Deserialize<ConversationResource>(response);
 
-        return jsonResponse.GetProperty("sid").ToString();
+        return deserialized?.Sid ?? throw new InvalidOperationException("Failed to deserialize response.");
     }
 
   
     public async Task<IEnumerable<MessageResource>> GetConversation(string conversationSid, int pageSize = 25, string? pageToken = null)
     {
-        var response = await _client.SendHttpRequestAsync(HttpMethod.Get, uri : UrlHelper.GetConversationsUri(conversationSid, pageSize, pageToken));
+        var response = await _client.GetHttpRequest(uri: UrlHelper.GetConversationsUri(conversationSid, pageSize, pageToken));
 
-        var jsonResponse = await response.GetContentAsJsonElementAsync();
+        var deserialized = JsonSerializer.Deserialize<ConversationResource>(response);
 
-        var messages = JsonSerializer.Deserialize<IEnumerable<MessageResource>>(jsonResponse.GetProperty("messages"));
-
-        return messages ?? Enumerable.Empty<MessageResource>();
+        return deserialized?.Messages ?? Enumerable.Empty<MessageResource>();
     }
 
     public async Task AddParticipants(string conversationSid, string identity)
     {
-        var content = CreateFormUrlEncodedContent(new Dictionary<string, string> { { "Identity", identity} });
+        var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "Identity", identity} });
 
-        await _client.SendHttpRequestAsync(HttpMethod.Post, content: content, uri: UrlHelper.AddParticipantsUri(conversationSid));
+        await _client.PostHttpRequest(content: content, uri: UrlHelper.AddParticipantsUri(conversationSid));
     }
 
     public async Task SendMessage(string conversationSid, string body, string author)
     {
-        var content = CreateFormUrlEncodedContent(new Dictionary<string, string> { { "Body", body }, { "Author", author } });
+        var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "Body", body }, { "Author", author } });
 
-        await _client.SendHttpRequestAsync(HttpMethod.Post, content: content, uri: UrlHelper.PostMessageUri(conversationSid));
+        await _client.PostHttpRequest(content: content, uri: UrlHelper.PostMessageUri(conversationSid));
     }
 
-    private static StringContent CreateFormUrlEncodedContent(string key, string value)
-    {
-        return new StringContent($"{key}={value}", Encoding.UTF8);
-    }
 
-    private static HttpContent CreateFormUrlEncodedContent(Dictionary<string, string> data)
-    {
-        return new FormUrlEncodedContent(data);
-    }
 }
