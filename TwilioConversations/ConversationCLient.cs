@@ -26,11 +26,11 @@ public class ConversationClient
     }
 
   
-    public async Task<IEnumerable<MessageResource>> GetConversation(string conversationSid, int pageSize = 25, string? pageToken = null)
+    public async Task<ConversationResource> GetConversation(string conversationSid, int pageSize = 25, string? pageToken = null)
     {
         var response = await _client.MakeHttpRequest<ConversationResource>(HttpMethod.Get, uri: UrlHelper.GetConversationsUri(conversationSid, pageSize, pageToken));
 
-        return response.Messages;
+        return response;
     }
 
     public async Task AddParticipants(string conversationSid, string identity)
