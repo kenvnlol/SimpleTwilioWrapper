@@ -22,7 +22,8 @@ public class ConversationClient
 
         var response = await _client.MakeHttpRequest<ConversationResource>(HttpMethod.Post, content);
 
-        return response.Sid;
+        // Should never be null when a conversation is first created.
+        return response.Sid!;
     }
 
   

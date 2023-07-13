@@ -25,8 +25,12 @@ public class ConversationResource
     [JsonPropertyName("date_created")]
     public string? DateCreated { get; init; }
 
+    //
+    // Could be null when ConversationResource is populated via conversations/messages/ 
+    //
+
     [JsonPropertyName("sid")]
-    public required string Sid { get; init; }
+    public string? Sid { get; init; }
 
     [JsonPropertyName("meta")]
     public Meta? Meta { get; init; }
