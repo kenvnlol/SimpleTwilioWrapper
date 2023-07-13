@@ -22,16 +22,14 @@ public class ConversationClient
 
         var response = await _client.MakeHttpRequest<ConversationResource>(HttpMethod.Post, content);
 
-        return response.Sid ?? throw new InvalidOperationException("Failed to deserialize response.");
+        return response.Sid;
     }
 
   
     public async Task<ConversationResource> GetConversation(string conversationSid, int pageSize = 25, string? pageToken = null)
-    {
-        var response = await _client.MakeHttpRequest<ConversationResource>(HttpMethod.Get, uri: UrlHelper.GetConversationsUri(conversationSid, pageSize, pageToken));
+        => await _client.MakeHttpRequest<ConversationResource>(HttpMethod.Get, uri: UrlHelper.GetConversationsUri(conversationSid, pageSize, pageToken));
 
-        return response;
-    }
+
 
     public async Task AddParticipants(string conversationSid, string identity)
     {

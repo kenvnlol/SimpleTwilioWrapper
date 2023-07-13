@@ -26,7 +26,7 @@ public class ConversationResource
     public string? DateCreated { get; init; }
 
     [JsonPropertyName("sid")]
-    public string? Sid { get; init; }
+    public required string Sid { get; init; }
 
     [JsonPropertyName("meta")]
     public Meta? Meta { get; init; }
