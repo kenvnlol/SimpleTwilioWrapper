@@ -8,12 +8,10 @@ namespace TwilioConversations;
 
 public class ConversationClient
 {
-    private readonly IHttpClientFactory _factory;
     private readonly HttpClient _client;
     public ConversationClient(IHttpClientFactory factory)
     {
-        _factory = factory;
-        _client = _factory.CreateClient(HttpClientNames.TwilioConversation);
+        _client = factory.CreateClient(HttpClientNames.TwilioConversation);
     }
 
     public async Task<string> CreateConversation(string? friendlyName = null)
