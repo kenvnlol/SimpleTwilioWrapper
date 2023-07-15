@@ -39,9 +39,15 @@ public class ConversationClient
         response.EnsureSuccessStatusCode();
     }
 
-    public async Task SendMessage(string conversationSid, string body, string author)
+    public async Task SendMessage(string conversationSid, string body, string author, IReadOnlyDictionary<string, string>? attributes = null)  
     {
-        var content = new FormUrlEncodedContent(new Dictionary<string, string> { { "Body", body }, { "Author", author } });
+        var content = new FormUrlEncodedContent(new Dictionary<string, string> 
+        {
+            { "Body", body }, 
+            { "Author", author },
+            { "Attributes", JsonSerializer.Serialize(attributes)}
+        });
+
 
         var response = await _client.PostAsync(UrlHelper.PostMessageUri(conversationSid), content: content);
 
