@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
             c.BaseAddress = new Uri(UrlHelper.BaseUri);
             c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);
             c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+            c.DefaultRequestHeaders.Add("X-Twilio-Webhook-Enabled", "true");
         });
 
         services.AddScoped<ConversationClient>();
