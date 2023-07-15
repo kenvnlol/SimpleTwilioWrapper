@@ -16,6 +16,9 @@ public class MessageResource
     [JsonPropertyName("conversation_sid")]
     public required string ConversationSid { get; init; }
 
+    [JsonPropertyName("attribute")]
+    public string? Attribute { get; init; }
+
     [JsonPropertyName("sid")]
     public required string Sid { get; init; }
 
