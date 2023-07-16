@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
     {
         var basicAuth = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{accountSid}:{authToken}"));
 
-        services.AddHttpClient(HttpClientNames.TwilioConversation, c =>
+        services.AddHttpClient<ConversationClient>(c =>
         {
             c.BaseAddress = new Uri(UrlHelper.BaseUri);
             c.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", basicAuth);

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using TwilioConversations.Resources;
 using TwilioConversations.Utility;
@@ -9,9 +10,9 @@ namespace TwilioConversations;
 public class ConversationClient
 {
     private readonly HttpClient _client;
-    public ConversationClient(IHttpClientFactory factory)
+    public ConversationClient(HttpClient client)
     {
-        _client = factory.CreateClient(HttpClientNames.TwilioConversation);
+        _client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
     public async Task<string> CreateConversation(string? friendlyName = null)
